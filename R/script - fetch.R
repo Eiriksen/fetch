@@ -96,3 +96,6 @@ save.data = function(df, filename){
 
 }
 
+#' Synonym function of read.data
+#' @export
+fetch <- read.data
