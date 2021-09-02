@@ -13,14 +13,9 @@
 #' @export
 read.data <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, col_types=NULL){
 
-  require(readxl)
-  require(googlesheets4)
-  require(glue)
-  require(tools)
 
-  file <- glue(file)
-  filename <- glue(file)
-
+  file <- glue::glue(file)
+  filename <- glue::glue(file)
 
   # If type is not specified, check if the filename is a google sheets file
   if(missing(type) & grepl("docs.google.com", filename, fixed=T))
@@ -29,13 +24,13 @@ read.data <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, 
   }
   # - if not a google sheets, check filetype from filename
   if (missing(type)){
-    type <- file_ext(filename)
+    type <- tools::file_ext(filename)
   }
 
 
   if (type == "xlsx" | type == "xls")
   {
-    df = read_excel(filename, skip=skip, sheet=sheet)
+    df = readxl::read_excel(filename, skip=skip, sheet=sheet)
   }
   else if (type == "csv")
   {
@@ -44,7 +39,7 @@ read.data <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, 
   }
   else if (type == "googlesheet")
   {
-    df = read_sheet(file, skip=skip, range=range, sheet=sheet, col_types=col_types)
+    df = googlesheets4::read_sheet(file, skip=skip, range=range, sheet=sheet, col_types=col_types)
   }
   else if (type == "txt")
   {
@@ -69,9 +64,10 @@ save.data = function(df, filename){
   require(openxlsx)
   require(glue)
   require(tools)
-  filename=glue(filename)
 
-  type = file_ext(filename)
+  filename=glue::glue(filename)
+
+  type = tools::file_ext(filename)
   if (type=="")
   {
     type="csv"
@@ -79,7 +75,7 @@ save.data = function(df, filename){
   }
   else if (type == "xlsx" || type == "xls")
   {
-    write.xlsx(df, filename)
+    readxl::write.xlsx(df, filename)
   }
   else if (type == "csv")
   {
