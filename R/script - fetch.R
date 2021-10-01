@@ -103,7 +103,7 @@ fetch <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, col_
 
     for(filepath in list_filepaths){
       message(glue::glue("Reading {filepath}"))
-      filename <- basename(filepath) %>% tools::file_path_sans_ext()
+      filename <- tools::file_path_sans_ext(basename(filepath))
       if (return==T){
         list_files[[filename]] <- read.data(filepath,type,skip,range,dec,sep,sheet,col_types)
       }
