@@ -13,7 +13,6 @@
 #' @export
 read.data <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, col_types=NULL){
 
-
   file <- glue::glue(file)
   filename <- glue::glue(file)
 
@@ -94,4 +93,33 @@ save.data = function(df, filename){
 
 #' Synonym function of read.data
 #' @export
-fetch <- read.data
+fetch <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, col_types=NULL, pattern_filename, return=T){
+
+  if (!missing(pattern_filename)){
+    if(missing(file)) file="."
+    list_filenames <- list.files(path=file,pattern=pattern_filename, recursive = T)
+    list_filepaths <- paste(file,"/",list_filenames,sep="")
+    list_files <- list()
+
+    for(filepath in list_filepaths){
+      message(glue::glue("Reading {filepath}"))
+      filename <- basename(filepath) %>% tools::file_path_sans_ext()
+      if (return==T){
+        list_files[[filename]] <- read.data(filepath,type,skip,range,dec,sep,sheet,col_types)
+      }
+      else {
+        assign_global(filename, read.data(filepath,type,skip,range,dec,sep,sheet,col_types))
+      }
+    }
+
+    if(return==T) return(list_files)
+  }
+  else{
+    read.data(file,type,skip,range,dec,sep,sheet,col_types)
+  }
+}
+
+#https://stackoverflow.com/questions/53178659/r-create-a-global-variable-with-the-name-of-a-functions-input
+assign_global <- function(name, value) {
+  assign(name, value, envir = .GlobalEnv)
+}

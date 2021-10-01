@@ -12,7 +12,9 @@ fetch(
   dec = ".",
   sep,
   sheet = NULL,
-  col_types = NULL
+  col_types = NULL,
+  pattern_filename,
+  return = T
 )
 }
 \description{
