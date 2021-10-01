@@ -97,7 +97,7 @@ fetch <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, col_
 
   if (!missing(pattern_filename)){
     if(missing(file)) file="."
-    list_filenames <- list.files(path=file,pattern=pattern_filename, recursive = T)
+    list_filenames <- list.files(path=file,pattern=pattern_filename, recursive = F)
     list_filepaths <- paste(file,"/",list_filenames,sep="")
     list_files <- list()
 
