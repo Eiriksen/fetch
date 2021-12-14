@@ -60,9 +60,6 @@ read.data <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, 
 #'
 #' @export
 save.data = function(df, filename){
-  require(openxlsx)
-  require(glue)
-  require(tools)
 
   filename=glue::glue(filename)
 
@@ -70,7 +67,7 @@ save.data = function(df, filename){
   if (type=="")
   {
     type="csv"
-    filename=glue("{filename}.csv")
+    filename=glue::glue("{filename}.csv")
   }
   else if (type == "xlsx" || type == "xls")
   {
@@ -97,7 +94,7 @@ fetch <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, col_
 
   if (!missing(pattern_filename)){
     if(missing(file)) file="."
-    list_filenames <- list.files(path=file,pattern=pattern_filename, recursive = F)
+    list_filenames <- list.files(path=file,pattern=pattern_filename, recursive = T)
     list_filepaths <- paste(file,"/",list_filenames,sep="")
     list_files <- list()
 
@@ -105,7 +102,7 @@ fetch <- function(file, type, skip=0, range=NULL, dec=".", sep, sheet=NULL, col_
       message(glue::glue("Reading {filepath}"))
       filename <- tools::file_path_sans_ext(basename(filepath))
       if (return==T){
-        list_files[[filename]] <- read.data(filepath,type,skip,range,dec,sep,sheet,col_types)
+        list_files[[filepath]] <- read.data(filepath,type,skip,range,dec,sep,sheet,col_types)
       }
       else {
         assign_global(filename, read.data(filepath,type,skip,range,dec,sep,sheet,col_types))
